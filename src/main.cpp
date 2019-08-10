@@ -24,6 +24,15 @@ CheapLCD lcd;
 #define TRIGGER_PIN  12
 #define ECHO_PIN     11
 #define MAX_DISTANCE 200
+
+
+#define BLINKY_PIN  12
+
+#define RX_PIN  0
+#define TX_PIN  1
+#define TWO_PIN  2
+#define TX_PIN  3
+
   
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
  
@@ -38,21 +47,23 @@ void setup() {
   lcd.begin();
 
   lcd.clear();
-  lcd.write("Heeeello World!!!");
+  lcd.write("--------------------");
   delay(1000);
-  lcd.backlightOff();
+  lcd.backlightOn();
   lcd.clear();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  //static CLCD_Button_t lastButton = BTN_NONE;
 
-  static CLCD_Button_t lastButton = BTN_NONE;
+  float cm = sonar.ping_cm();
+  String cmStr(cm, 2);
 
-  Serial.print("Ping Dat: ");
-  Serial.print(sonar.ping_cm());
-  Serial.println("cm");
-
+  Serial.println(cmStr);
+  lcd.write(cmStr.c_str());
+  delay(2000);
+  lcd.clear();
+  /*
   CLCD_Button_t newReading = lcd.readButton();
 
   if (newReading != lastButton) {   // button changed
@@ -62,7 +73,7 @@ void loop() {
     if (newReading != BTN_NONE) {   // button was pressed
       switch(newReading) {
         case BTN_RIGHT:
-          lcd.write("RITE!");
+          lcd.write(cmStr.c_str());
           break;
         case BTN_UP:
           lcd.write("Up");
@@ -85,9 +96,10 @@ void loop() {
 
     }
     else {                        // button was released
-      lcd.backlightOff();
+      lcd.backlightOn();
       lcd.clear();
     }
   }
+   */
 
 }
